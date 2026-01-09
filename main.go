@@ -25,9 +25,22 @@ func main() {
 
 	router.Use(
 		cors.Handler(
-			//someArgs Here
-		)
+			cors.Options{
+				AllowedOrigins: []string{"http://*", "https://*"},
+				AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+				AllowedHeaders: []string{"*"},
+				ExposedHeaders: []string{"Link"},
+				AllowCredentials: false,
+				MaxAge: 300,
+			},
+		),
 	)
+
+	v1Router := chi.NewRouter()
+
+	v1Router.HandleFunc("/ready", handlerReadiness)
+
+	router.Mount("/v1", v1Router)
 
 	server := &http.Server{
 		Handler: router,
@@ -39,4 +52,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
