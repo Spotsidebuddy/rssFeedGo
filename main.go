@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Spotsidebuddy/rssFeedGo/internal/database"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
@@ -15,6 +16,10 @@ import (
 func main() {
 	godotenv.Load()
 	portString := os.Getenv("PORT")
+
+	type apiConfig struct {
+		DB *database.Queries
+	} 
 
 	if portString == "" {
 		log.Fatal("No PORT found in environment variables")
